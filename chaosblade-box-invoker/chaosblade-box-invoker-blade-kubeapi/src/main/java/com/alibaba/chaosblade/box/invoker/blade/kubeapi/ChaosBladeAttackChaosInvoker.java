@@ -31,12 +31,14 @@ import com.alibaba.chaosblade.box.invoker.blade.kubeapi.crd.ChaosBladeSpec;
 import com.alibaba.chaosblade.box.invoker.blade.kubeapi.crd.ExperimentSpec;
 import com.alibaba.chaosblade.box.invoker.blade.kubeapi.crd.FlagSpec;
 import com.alibaba.chaosblade.box.invoker.blade.kubeapi.model.StatusResponseCommand;
+import com.alibaba.fastjson.JSON;
 import io.kubernetes.client.openapi.ApiCallback;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CustomObjectsApi;
 import io.kubernetes.client.openapi.models.V1ObjectMeta;
 import io.kubernetes.client.util.Config;
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.Call;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -80,8 +82,9 @@ public class ChaosBladeAttackChaosInvoker extends AbstractChaosBladeChaosInvoker
                                             .build()
                             }).build()).build();
 
+            log.info("chaosBladeAttackChaosInvoker chaosBladeRequest {}", JSON.toJSONString(chaosBladeRequest));
 
-            apiInstance.createClusterCustomObjectAsync(
+            Call call = apiInstance.createClusterCustomObjectAsync(
                     Constants.GROUP,
                     Constants.VERSION,
                     Constants.PLURAL,
@@ -103,6 +106,7 @@ public class ChaosBladeAttackChaosInvoker extends AbstractChaosBladeChaosInvoker
 
                         @Override
                         public void onSuccess(Object result, int statusCode, Map responseHeaders) {
+                            log.info("chaosBladeAttackChaosInvoker onSuccess ");
                             checkStatus(completableFuture, v1ObjectMeta.getName(), requestCommand.getConfig());
                         }
 
@@ -117,6 +121,8 @@ public class ChaosBladeAttackChaosInvoker extends AbstractChaosBladeChaosInvoker
                         }
                     }
             );
+
+            log.info("chaosBladeAttackChaosInvoker tureRequest {}", call.request());
         } catch (ApiException e) {
             ResponseCommand responseCommand = ResponseCommand.builder()
                     .success(false)

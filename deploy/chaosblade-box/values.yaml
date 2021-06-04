@@ -1,8 +1,8 @@
 # Default values for chaosblade-box.
 box:
-  repository: registry.cn-hangzhou.aliyuncs.com/chaosblade/chaosblade-box
-  version: 0.4.1
-  pullPolicy: IfNotPresent
+  repository: harbor.zmlearn.com/chaosblade/chaosblade-box
+  tag: 0.4.1
+  pullPolicy: Always
 
 spring:
   datasource:

@@ -27,7 +27,7 @@ spec:
                       - virtual-kubelet
       containers:
         - name: chaosblade-box
-          image: {{ .Values.box.repository }}:{{ .Values.box.version }}
+          image: {{ .Values.box.repository }}:{{ .Values.box.tag }}
           imagePullPolicy: {{ .Values.box.pullPolicy }}
           env:
             - name: KUBERNETES_NODENAME
@@ -59,6 +59,8 @@ spec:
               name: hosts
 
       dnsPolicy: ClusterFirstWithHostNet
+      imagePullSecrets:
+        - name: proharborregcred
       tolerations:
         - effect: NoSchedule
           operator: Exists
